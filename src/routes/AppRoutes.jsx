@@ -1,4 +1,10 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route
+} from "react-router-dom";
+
+import MainLayout from "../layouts/MainLayout";
 
 import Home from "../pages/Home";
 import Login from "../pages/Login";
@@ -10,37 +16,63 @@ import Result from "../pages/Result";
 import NotFound from "../pages/NotFound";
 
 function AppRoutes() {
+
   return (
+
     <BrowserRouter>
 
-      <Routes>
+      <MainLayout>
 
-        <Route path="/" element={<Home />} />
+        <Routes>
 
-        <Route path="/login" element={<Login />} />
+          <Route
+            path="/"
+            element={<Home />}
+          />
 
-        <Route path="/register" element={<Register />} />
+          <Route
+            path="/login"
+            element={<Login />}
+          />
 
-        <Route
-          path="/student-dashboard"
-          element={<StudentDashboard />}
-        />
+          <Route
+            path="/register"
+            element={<Register />}
+          />
 
-        <Route
-          path="/admin-dashboard"
-          element={<AdminDashboard />}
-        />
+          <Route
+            path="/student-dashboard"
+            element={<StudentDashboard />}
+          />
 
-        <Route path="/exam" element={<Exam />} />
+          <Route
+            path="/admin-dashboard"
+            element={<AdminDashboard />}
+          />
 
-        <Route path="/result" element={<Result />} />
+          <Route
+            path="/exam"
+            element={<Exam />}
+          />
 
-        <Route path="*" element={<NotFound />} />
+          <Route
+            path="/result"
+            element={<Result />}
+          />
 
-      </Routes>
+          <Route
+            path="*"
+            element={<NotFound />}
+          />
+
+        </Routes>
+
+      </MainLayout>
 
     </BrowserRouter>
+
   );
+
 }
 
 export default AppRoutes;
