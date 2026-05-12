@@ -1,7 +1,8 @@
 import {
   getAuth,
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  signOut
 } from "firebase/auth";
 
 import app from "./firebaseConfig";
@@ -11,5 +12,6 @@ const auth = getAuth(app);
 export {
   auth,
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  signOut
 };
