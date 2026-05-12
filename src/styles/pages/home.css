@@ -2,13 +2,14 @@
   min-height: 100vh;
   background: #0a0a0a;
   color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .hero-section{
-  text-align: center;
+  height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .hero-section h1{
@@ -26,17 +27,15 @@
 .hero-buttons{
   display: flex;
   gap: 20px;
-  justify-content: center;
 }
 
 .hero-buttons button{
-  padding: 12px 28px;
+  padding: 14px 30px;
   border: none;
   border-radius: 10px;
   background: #2563eb;
   color: white;
   cursor: pointer;
-  font-size: 1rem;
   transition: 0.3s;
 }
 
