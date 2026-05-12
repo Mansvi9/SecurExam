@@ -1,0 +1,18 @@
+.exam-page{
+  min-height: 100vh;
+  background: #0a0a0a;
+  color: white;
+  padding: 40px;
+}
+
+.exam-header{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
+
+.question-box{
+  background: #111827;
+  padding: 30px;
+  border-radius: 15px;
+}
