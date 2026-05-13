@@ -17,6 +17,7 @@ import NotFound from "../pages/NotFound";
 import CreateExam from "../pages/CreateExam";
 import AllExams from "../pages/AllExams";
 import AddQuestion from "../pages/AddQuestion";
+import ResultsDashboard from "../pages/ResultsDashboard";
 
 function AppRoutes() {
 
@@ -56,6 +57,11 @@ function AppRoutes() {
           <Route
   path="/exam/:examId"
   element={<Exam />}
+/>
+
+<Route
+  path="/results-dashboard"
+  element={<ResultsDashboard />}
 />
 
           <Route

@@ -57,3 +57,33 @@
   margin-bottom: 30px;
   color: #2563eb;
 }
+
+.warning-text{
+  text-align: center;
+  color: red;
+  margin-bottom: 30px;
+}
+
+.webcam-box{
+  width: 350px;
+  margin: auto;
+  margin-bottom: 30px;
+  background: #111827;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+.webcam-box video{
+  width: 100%;
+  border-radius: 10px;
+}
+
+.timer{
+  text-align: center;
+  color: #2563eb;
+}
+
+.warning-text{
+  text-align: center;
+  color: red;
+}

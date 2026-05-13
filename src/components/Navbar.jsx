@@ -59,6 +59,18 @@ function Navbar() {
             </li>
 
             <li>
+
+  <Link
+    to="/results-dashboard"
+  >
+
+    Results
+
+  </Link>
+
+</li>
+
+            <li>
               <button className="logout-btn" onClick={handleLogout}>
                 Logout
               </button>
