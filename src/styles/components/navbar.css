@@ -29,3 +29,17 @@
 .nav-links a:hover{
   color: #3b82f6;
 }
+
+.logout-btn{
+  padding: 10px 20px;
+  border: none;
+  background: #ef4444;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.logout-btn:hover{
+  background: #dc2626;
+}
