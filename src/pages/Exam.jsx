@@ -23,244 +23,8 @@ import {
 } from "firebase/firestore";
 
 import {
-  ref,
-  uploadString,
-  getDownloadURL
-} from "firebase/storage";
-
-import {
   auth
 } from "../firebase/auth";
-
-useEffect(() => {
-
-  document.documentElement.requestFullscreen();
-
-}, []);
-
-useEffect(() => {
-
-  const handleFullscreen = () => {
-
-    if (!document.fullscreenElement) {
-
-      alert(
-        "Warning: Fullscreen mode exited!"
-      );
-
-      setWarningCount((prev) => prev + 1);
-    }
-  };
-
-  document.addEventListener(
-    "fullscreenchange",
-    handleFullscreen
-  );
-
-  return () => {
-
-    document.removeEventListener(
-      "fullscreenchange",
-      handleFullscreen
-    );
-  };
-
-}, []);
-
-useEffect(() => {
-
-  const disableRightClick =
-    (e) => {
-
-      e.preventDefault();
-
-      alert(
-        "Right Click Disabled!"
-      );
-
-    };
-
-  document.addEventListener(
-    "contextmenu",
-    disableRightClick
-  );
-
-  return () => {
-
-    document.removeEventListener(
-      "contextmenu",
-      disableRightClick
-    );
-
-  };
-
-}, []);
-
-useEffect(() => {
-
-  const blockCopyPaste =
-    (e) => {
-
-      e.preventDefault();
-
-      alert(
-        "Copy/Paste Disabled!"
-      );
-
-    };
-
-  document.addEventListener(
-    "copy",
-    blockCopyPaste
-  );
-
-  document.addEventListener(
-    "paste",
-    blockCopyPaste
-  );
-
-  return () => {
-
-    document.removeEventListener(
-      "copy",
-      blockCopyPaste
-    );
-
-    document.removeEventListener(
-      "paste",
-      blockCopyPaste
-    );
-
-  };
-
-}, []);
-
-useEffect(() => {
-
-  const checkCamera = setInterval(() => {
-
-    if (
-      webcamRef.current &&
-      webcamRef.current.video
-    ) {
-
-      const video =
-        webcamRef.current.video;
-
-      if (
-        video.readyState !== 4
-      ) {
-
-        alert(
-          "Camera Off Detected!"
-        );
-
-        setWarningCount(
-          (prev) => prev + 1
-        );
-
-      }
-
-    }
-
-  }, 5000);
-
-  return () =>
-    clearInterval(checkCamera);
-
-}, []);
-
-useEffect(() => {
-
-  const handleKeyDown =
-    (e) => {
-
-      if (
-        e.key === "F12"
-      ) {
-
-        e.preventDefault();
-
-        alert(
-          "Inspect Blocked!"
-        );
-
-      }
-
-      if (
-        e.ctrlKey &&
-        e.key === "c"
-      ) {
-
-        e.preventDefault();
-
-        alert(
-          "Copy Blocked!"
-        );
-
-      }
-
-      if (
-        e.ctrlKey &&
-        e.key === "v"
-      ) {
-
-        e.preventDefault();
-
-        alert(
-          "Paste Blocked!"
-        );
-
-      }
-
-      if (
-        e.ctrlKey &&
-        e.key === "u"
-      ) {
-
-        e.preventDefault();
-
-        alert(
-          "View Source Blocked!"
-        );
-
-      }
-
-      if (
-        e.ctrlKey &&
-        e.shiftKey &&
-        e.key === "I"
-      ) {
-
-        e.preventDefault();
-
-        alert(
-          "Developer Tools Blocked!"
-        );
-
-      }
-
-    };
-
-  document.addEventListener(
-    "keydown",
-    handleKeyDown
-  );
-
-  return () => {
-
-    document.removeEventListener(
-      "keydown",
-      handleKeyDown
-    );
-
-  };
-
-}, []);
-
-
-import storage
-from "../firebase/storage";
 
 import "../styles/pages/exam.css";
 
@@ -287,52 +51,13 @@ function Exam() {
     setTimeLeft] =
     useState(300);
 
-  const [warnings,
-    setWarnings] =
+  const [warningCount,
+    setWarningCount] =
     useState(0);
 
   const [faceMessage,
     setFaceMessage] =
     useState("");
-
-  const [warningCount, setWarningCount] = useState(0);
-
-  useEffect(() => {
-
-  const handleVisibility = () => {
-
-    if (document.hidden) {
-
-      alert("Warning: Tab Switching Detected!");
-
-      setWarningCount((prev) => prev + 1);
-    }
-  };
-
-  document.addEventListener(
-    "visibilitychange",
-    handleVisibility
-  );
-
-  return () => {
-    document.removeEventListener(
-      "visibilitychange",
-      handleVisibility
-    );
-  };
-
-}, []);
-
-useEffect(() => {
-
-  if (warningCount >= 3) {
-
-    alert("Exam Auto Submitted!");
-
-    navigate("/result");
-  }
-
-}, [warningCount]);
 
   useEffect(() => {
 
@@ -374,10 +99,10 @@ useEffect(() => {
         if (document.hidden) {
 
           alert(
-            "Tab Switching Detected!"
+            "Warning: Tab Switching Detected!"
           );
 
-          setWarnings(
+          setWarningCount(
             (prev) => prev + 1
           );
 
@@ -432,10 +157,10 @@ useEffect(() => {
         ) {
 
           alert(
-            "Fullscreen Exit Detected!"
+            "Warning: Fullscreen Exited!"
           );
 
-          setWarnings(
+          setWarningCount(
             (prev) => prev + 1
           );
 
@@ -461,7 +186,7 @@ useEffect(() => {
 
   useEffect(() => {
 
-    if (warnings >= 3) {
+    if (warningCount >= 3) {
 
       alert(
         "Too Many Warnings! Exam Submitted."
@@ -471,7 +196,199 @@ useEffect(() => {
 
     }
 
-  }, [warnings]);
+  }, [warningCount]);
+
+  useEffect(() => {
+
+    const disableRightClick =
+      (e) => {
+
+        e.preventDefault();
+
+        alert(
+          "Right Click Disabled!"
+        );
+
+      };
+
+    document.addEventListener(
+      "contextmenu",
+      disableRightClick
+    );
+
+    return () => {
+
+      document.removeEventListener(
+        "contextmenu",
+        disableRightClick
+      );
+
+    };
+
+  }, []);
+
+  useEffect(() => {
+
+    const blockCopyPaste =
+      (e) => {
+
+        e.preventDefault();
+
+        alert(
+          "Copy/Paste Disabled!"
+        );
+
+      };
+
+    document.addEventListener(
+      "copy",
+      blockCopyPaste
+    );
+
+    document.addEventListener(
+      "paste",
+      blockCopyPaste
+    );
+
+    return () => {
+
+      document.removeEventListener(
+        "copy",
+        blockCopyPaste
+      );
+
+      document.removeEventListener(
+        "paste",
+        blockCopyPaste
+      );
+
+    };
+
+  }, []);
+
+  useEffect(() => {
+
+    const handleKeyDown =
+      (e) => {
+
+        if (
+          e.key === "F12"
+        ) {
+
+          e.preventDefault();
+
+          alert(
+            "Inspect Blocked!"
+          );
+
+        }
+
+        if (
+          e.ctrlKey &&
+          e.key === "c"
+        ) {
+
+          e.preventDefault();
+
+          alert(
+            "Copy Blocked!"
+          );
+
+        }
+
+        if (
+          e.ctrlKey &&
+          e.key === "v"
+        ) {
+
+          e.preventDefault();
+
+          alert(
+            "Paste Blocked!"
+          );
+
+        }
+
+        if (
+          e.ctrlKey &&
+          e.key === "u"
+        ) {
+
+          e.preventDefault();
+
+          alert(
+            "View Source Blocked!"
+          );
+
+        }
+
+        if (
+          e.ctrlKey &&
+          e.shiftKey &&
+          e.key === "I"
+        ) {
+
+          e.preventDefault();
+
+          alert(
+            "Developer Tools Blocked!"
+          );
+
+        }
+
+      };
+
+    document.addEventListener(
+      "keydown",
+      handleKeyDown
+    );
+
+    return () => {
+
+      document.removeEventListener(
+        "keydown",
+        handleKeyDown
+      );
+
+    };
+
+  }, []);
+
+  useEffect(() => {
+
+    const checkCamera =
+      setInterval(() => {
+
+        if (
+          webcamRef.current &&
+          webcamRef.current.video
+        ) {
+
+          const video =
+            webcamRef.current.video;
+
+          if (
+            video.readyState !== 4
+          ) {
+
+            alert(
+              "Camera Off Detected!"
+            );
+
+            setWarningCount(
+              (prev) => prev + 1
+            );
+
+          }
+
+        }
+
+      }, 5000);
+
+    return () =>
+      clearInterval(checkCamera);
+
+  }, []);
 
   async function loadModels() {
 
@@ -507,7 +424,7 @@ useEffect(() => {
             "No Face Detected"
           );
 
-          setWarnings(
+          setWarningCount(
             (prev) => prev + 1
           );
 
@@ -521,7 +438,7 @@ useEffect(() => {
             "Multiple Faces Detected"
           );
 
-          setWarnings(
+          setWarningCount(
             (prev) => prev + 1
           );
 
@@ -607,29 +524,31 @@ useEffect(() => {
     });
 
     await addDoc(
-  collection(db, "results"),
-  {
-    studentName:
-      auth.currentUser?.displayName
-      || "Unknown",
+      collection(db, "results"),
+      {
+        studentName:
+          auth.currentUser
+            ?.displayName
+          || "Unknown",
 
-    studentEmail:
-      auth.currentUser?.email,
+        studentEmail:
+          auth.currentUser
+            ?.email,
 
-    examId,
+        examId,
 
-    score,
+        score,
 
-    total:
-      questions.length,
+        total:
+          questions.length,
 
-    warnings:
-      warningCount,
+        warnings:
+          warningCount,
 
-    submittedAt:
-      new Date()
-  }
-);
+        submittedAt:
+          new Date()
+      }
+    );
 
     navigate(
       "/result",
@@ -669,7 +588,7 @@ useEffect(() => {
 
         Warnings:
         {" "}
-        {warnings}
+        {warningCount}/3
 
       </h3>
 
@@ -677,6 +596,7 @@ useEffect(() => {
 
         <Webcam
           ref={webcamRef}
+          screenshotFormat="image/jpeg"
         />
 
         <h3>
@@ -684,10 +604,6 @@ useEffect(() => {
           {faceMessage}
 
         </h3>
-
-        <h3>
-  Warnings: {warningCount}/3
-</h3>
 
       </div>
 
@@ -714,6 +630,15 @@ useEffect(() => {
 
               <button
                 key={option}
+
+                className={
+                  answers[
+                    question.id
+                  ] === option
+                    ? "selected-option"
+                    : ""
+                }
+
                 onClick={() =>
                   handleOptionSelect(
                     question.id,

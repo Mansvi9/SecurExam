@@ -87,3 +87,27 @@
   text-align: center;
   color: red;
 }
+
+.options{
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.options button{
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  background: #1f2937;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.options button:hover{
+  background: #2563eb;
+}
+
+.selected-option{
+  background: #2563eb !important;
+}
