@@ -1,126 +1,68 @@
-import {
-  useEffect,
-  useState
-} from "react";
-
+import { useEffect, useState } from "react";
 import db from "../firebase/firestore";
-
-import {
-  collection,
-  getDocs
-} from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { auth } from "../firebase/auth";
 
 import "../styles/pages/resultsDashboard.css";
 
 function ResultsDashboard() {
-
-  const [results,
-    setResults] =
-    useState([]);
+  const [results, setResults] = useState([]);
 
   useEffect(() => {
-
     fetchResults();
-
   }, []);
 
   async function fetchResults() {
-
     try {
+      const q = query(
+        collection(db, "results"),
+        where("studentEmail", "==", auth.currentUser?.email)
+      );
 
-      const querySnapshot =
-        await getDocs(
-          collection(db, "results")
-        );
+      const querySnapshot = await getDocs(q);
 
-      const data = [];
-
-      querySnapshot.forEach((doc) => {
-
-        data.push({
-          id: doc.id,
-          ...doc.data()
-        });
-
-      });
+      const data = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
       setResults(data);
-
     } catch (error) {
-
       console.log(error);
-
     }
-
   }
 
   return (
-
     <div className="results-page">
 
-      <h1>
+      <h1>📊 Your Results</h1>
 
-        Results Dashboard
+      {results.length === 0 ? (
+        <p>No results found</p>
+      ) : (
+        <div className="results-grid">
 
-      </h1>
+          {results.map((result) => (
+            <div key={result.id} className="result-card">
 
-      <div className="results-grid">
+              <h2>{result.studentName}</h2>
 
-        {results.map((result) => (
+              <p>📧 {result.studentEmail}</p>
 
-          <div
-            key={result.id}
-            className="result-card"
-          >
+              <p>📘 Score: {result.score} / {result.total}</p>
 
-            <h2>
+              <p>⚠ Warnings: {result.warnings}</p>
 
-              {result.studentName}
+              <p>🆔 Exam ID: {result.examId}</p>
 
-            </h2>
+            </div>
+          ))}
 
-            <p>
-
-              {result.studentEmail}
-
-            </p>
-
-            <p>
-
-              Score:
-              {" "}
-              {result.score}
-              {" / "}
-              {result.total}
-
-            </p>
-
-            <p>
-
-              Warnings:
-              {" "}
-              {result.warnings}
-
-            </p>
-
-            <p>
-
-              Exam ID:
-              {" "}
-              {result.examId}
-
-            </p>
-
-          </div>
-
-        ))}
-
-      </div>
+        </div>
+      )}
 
     </div>
-
   );
-
 }
 
 export default ResultsDashboard;
