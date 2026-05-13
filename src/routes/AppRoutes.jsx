@@ -14,6 +14,9 @@ import AdminDashboard from "../pages/AdminDashboard";
 import Exam from "../pages/Exam";
 import Result from "../pages/Result";
 import NotFound from "../pages/NotFound";
+import CreateExam from "../pages/CreateExam";
+import AllExams from "../pages/AllExams";
+import AddQuestion from "../pages/AddQuestion";
 
 function AppRoutes() {
 
@@ -51,9 +54,9 @@ function AppRoutes() {
           />
 
           <Route
-            path="/exam"
-            element={<Exam />}
-          />
+  path="/exam/:examId"
+  element={<Exam />}
+/>
 
           <Route
             path="/result"
@@ -64,6 +67,21 @@ function AppRoutes() {
             path="*"
             element={<NotFound />}
           />
+
+          <Route
+            path="/create-exam"
+            element={<CreateExam />}
+          />
+
+          <Route
+  path="/all-exams"
+  element={<AllExams />}
+/>
+
+<Route
+  path="/add-question/:examId"
+  element={<AddQuestion />}
+/>
 
         </Routes>
 

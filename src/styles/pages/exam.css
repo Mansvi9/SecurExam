@@ -51,3 +51,9 @@
   border-radius: 10px;
   cursor: pointer;
 }
+
+.timer{
+  text-align: center;
+  margin-bottom: 30px;
+  color: #2563eb;
+}

@@ -1,0 +1,42 @@
+.add-question-page{
+  min-height: 100vh;
+  background: black;
+  padding: 40px;
+  color: white;
+}
+
+.add-question-container{
+  max-width: 600px;
+  margin: auto;
+  background: #111827;
+  padding: 40px;
+  border-radius: 15px;
+}
+
+.add-question-container h1{
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.add-question-form{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.add-question-form input{
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  background: #1f2937;
+  color: white;
+}
+
+.add-question-form button{
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+}

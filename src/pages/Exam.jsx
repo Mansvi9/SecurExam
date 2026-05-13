@@ -1,127 +1,224 @@
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState
+} from "react";
 
-import Webcam from "react-webcam";
+import {
+  useParams,
+  useNavigate
+} from "react-router-dom";
+
+import db from "../firebase/firestore";
+
+import {
+  collection,
+  getDocs
+} from "firebase/firestore";
 
 import "../styles/pages/exam.css";
 
 function Exam() {
 
-  const [warnings, setWarnings] =
-    useState(0);
+  const { examId } =
+    useParams();
+
+  const navigate =
+    useNavigate();
+
+  const [questions,
+    setQuestions] =
+    useState([]);
+
+  const [answers,
+    setAnswers] =
+    useState({});
+
+  const [timeLeft,
+  setTimeLeft] =
+  useState(300);
 
   useEffect(() => {
 
-    const enterFullscreen = async () => {
+    fetchQuestions();
+
+  }, []);
+
+  useEffect(() => {
+
+  if (timeLeft <= 0) {
+
+    handleSubmitExam();
+
+    return;
+
+  }
+
+  const timer =
+    setInterval(() => {
+
+      setTimeLeft(
+        (prev) => prev - 1
+      );
+
+    }, 1000);
+
+  return () =>
+    clearInterval(timer);
+
+}, [timeLeft]);
+
+  async function fetchQuestions() {
+
+    try {
+
+      const querySnapshot =
+        await getDocs(
+          collection(
+            db,
+            "exams",
+            examId,
+            "questions"
+          )
+        );
+
+      const data = [];
+
+      querySnapshot.forEach((doc) => {
+
+        data.push({
+          id: doc.id,
+          ...doc.data()
+        });
+
+      });
+
+      setQuestions(data);
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+
+  }
+
+  function handleOptionSelect(
+    questionId,
+    option
+  ) {
+
+    setAnswers({
+      ...answers,
+      [questionId]: option
+    });
+
+  }
+
+  function handleSubmitExam() {
+
+    let score = 0;
+
+    questions.forEach((question) => {
 
       if (
-        document.documentElement
-          .requestFullscreen
+        answers[question.id]
+        ===
+        question.correctAnswer
       ) {
 
-        await document
-          .documentElement
-          .requestFullscreen();
+        score++;
 
       }
 
-    };
+    });
 
-    enterFullscreen();
-
-  }, []);
-
-  useEffect(() => {
-
-    const handleVisibility =
-      () => {
-
-        if (document.hidden) {
-
-          alert(
-            "Tab Switching Detected!"
-          );
-
-          setWarnings(
-            (prev) => prev + 1
-          );
-
+    navigate(
+      "/result",
+      {
+        state: {
+          score,
+          total:
+          questions.length
         }
-
-      };
-
-    document.addEventListener(
-      "visibilitychange",
-      handleVisibility
+      }
     );
 
-    return () => {
-
-      document.removeEventListener(
-        "visibilitychange",
-        handleVisibility
-      );
-
-    };
-
-  }, []);
+  }
 
   return (
 
     <div className="exam-page">
 
-      <div className="exam-header">
+      <h1>
 
-        <h1>
+        Exam
 
-          AI Proctored Exam
+      </h1>
 
-        </h1>
+      <h2 className="timer">
 
-        <h2>
+  Time Left:
+  {" "}
+  {Math.floor(timeLeft / 60)}
+  :
+  {String(timeLeft % 60)
+    .padStart(2, "0")}
 
-          Warnings: {warnings}
+</h2>
 
-        </h2>
+      {questions.map((question,
+        index) => (
 
-      </div>
+        <div
+          key={question.id}
+          className="question-card"
+        >
 
-      <div className="exam-container">
+          <h2>
 
-        <div className="webcam-section">
+            {index + 1}.
+            {" "}
+            {question.question}
 
-          <Webcam />
-
-        </div>
-
-        <div className="question-section">
-
-          <h3>
-            What is Artificial Intelligence?
-          </h3>
+          </h2>
 
           <div className="options">
 
-            <button>
-              Option A
-            </button>
+            {question.options.map(
+              (option) => (
 
-            <button>
-              Option B
-            </button>
+              <button
+                key={option}
+                onClick={() =>
+                  handleOptionSelect(
+                    question.id,
+                    option
+                  )
+                }
+              >
 
-            <button>
-              Option C
-            </button>
+                {option}
 
-            <button>
-              Option D
-            </button>
+              </button>
+
+            ))}
 
           </div>
 
         </div>
 
-      </div>
+      ))}
+
+      <button
+        className="submit-btn"
+        onClick={
+          handleSubmitExam
+        }
+      >
+
+        Submit Exam
+
+      </button>
 
     </div>
 
