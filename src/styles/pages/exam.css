@@ -111,3 +111,48 @@
 .selected-option{
   background: #2563eb !important;
 }
+
+.submit-btn {
+  width: 100%;
+  max-width: 300px;
+  margin: 30px auto;
+  display: block;
+
+  padding: 14px 20px;
+  font-size: 18px;
+  font-weight: 600;
+
+  color: #fff;
+  background: linear-gradient(135deg, #4f46e5, #2563eb);
+
+  border: none;
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+
+  transition: all 0.25s ease-in-out;
+
+  letter-spacing: 0.5px;
+}
+
+/* Hover effect */
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 25px rgba(37, 99, 235, 0.4);
+  background: linear-gradient(135deg, #4338ca, #1d4ed8);
+}
+
+/* Active click effect */
+.submit-btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 8px 15px rgba(37, 99, 235, 0.25);
+}
+
+/* Disabled state (future use) */
+.submit-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  box-shadow: none;
+}

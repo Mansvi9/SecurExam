@@ -1,11 +1,11 @@
-// import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router-dom";
 import "../styles/pages/home.css";
 
 function Home() {
+  const navigate = useNavigate();
+
   return (
     <div className="home">
-
-      {/* <Navbar /> */}
 
       <div className="hero-section">
 
@@ -17,9 +17,19 @@ function Home() {
 
         <div className="hero-buttons">
 
-          <button>Get Started</button>
+          <button
+            className="primary-btn"
+            onClick={() => navigate("/login")}
+          >
+            Get Started
+          </button>
 
-          <button>Learn More</button>
+          <button
+            className="secondary-btn"
+            onClick={() => navigate("/about")}
+          >
+            Learn More
+          </button>
 
         </div>
 

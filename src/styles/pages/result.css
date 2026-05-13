@@ -1,15 +1,34 @@
-.result-page{
-  min-height: 100vh;
-  background: #0a0a0a;
+.result-card {
+  background: #1e293b;
   color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  padding: 15px;
+  margin: 10px auto;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
-.result-container{
-  background: #111827;
-  padding: 50px;
-  border-radius: 15px;
-  text-align: center;
+.delete-btn {
+  margin-top: 10px;
+  padding: 10px 15px;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background: #dc2626;
+}
+
+.home-btn {
+  margin-top: 20px;
+  padding: 12px 20px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
 }
