@@ -30,6 +30,8 @@ import "../styles/pages/exam.css";
 
 function Exam() {
 
+  const faceIntervalRef = useRef(null);
+
   const { examId } =
     useParams();
 
@@ -267,6 +269,14 @@ function Exam() {
   }, []);
 
   useEffect(() => {
+  return () => {
+    if (faceIntervalRef.current) {
+      clearInterval(faceIntervalRef.current);
+    }
+  };
+}, []);
+
+  useEffect(() => {
 
     const handleKeyDown =
       (e) => {
@@ -400,63 +410,32 @@ function Exam() {
 
   }
 
-  function startFaceDetection() {
+ function startFaceDetection() {
+  if (faceIntervalRef.current) return;
 
-    setInterval(async () => {
+  faceIntervalRef.current = setInterval(async () => {
+    if (
+      webcamRef.current &&
+      webcamRef.current.video
+    ) {
+      const detections =
+        await faceapi.detectAllFaces(
+          webcamRef.current.video,
+          new faceapi.TinyFaceDetectorOptions()
+        );
 
-      if (
-        webcamRef.current &&
-        webcamRef.current.video
-      ) {
-
-        const detections =
-          await faceapi.detectAllFaces(
-            webcamRef.current.video,
-            new faceapi
-            .TinyFaceDetectorOptions()
-          );
-
-        if (
-          detections.length === 0
-        ) {
-
-          setFaceMessage(
-            "No Face Detected"
-          );
-
-          setWarningCount(
-            (prev) => prev + 1
-          );
-
-        }
-
-        else if (
-          detections.length > 1
-        ) {
-
-          setFaceMessage(
-            "Multiple Faces Detected"
-          );
-
-          setWarningCount(
-            (prev) => prev + 1
-          );
-
-        }
-
-        else {
-
-          setFaceMessage(
-            "Face Detected"
-          );
-
-        }
-
+      if (detections.length === 0) {
+        setFaceMessage("No Face Detected");
+        setWarningCount((prev) => prev + 1);
+      } else if (detections.length > 1) {
+        setFaceMessage("Multiple Faces Detected");
+        setWarningCount((prev) => prev + 1);
+      } else {
+        setFaceMessage("Face Detected");
       }
-
-    }, 5000);
-
-  }
+    }
+  }, 5000);
+}
 
   async function fetchQuestions() {
 

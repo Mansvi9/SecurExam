@@ -22,6 +22,10 @@ function StudentDashboard() {
           AI Monitoring
         </div>
 
+        <div className="card-grid upgrade-grid"></div>
+        <div className="card glass hover-card"></div>
+        <button className="start-btn glow-btn"></button>
+
       </div>
 
     </div>

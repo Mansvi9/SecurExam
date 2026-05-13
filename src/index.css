@@ -6,8 +6,34 @@
   box-sizing: border-box;
 }
 
-body{
-  background: #0a0a0a;
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: radial-gradient(circle at top, #0b1220, #05070d);
   color: white;
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+}
+
+.shadow {
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #3b82f6, #06b6d4);
+  border: none;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  transform: scale(1.05);
+  transition: 0.2s;
 }
