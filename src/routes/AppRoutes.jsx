@@ -74,10 +74,7 @@ function AppRoutes() {
             element={<NotFound />}
           />
 
-          <Route
-            path="/create-exam"
-            element={<CreateExam />}
-          />
+          <Route path="/admin/create-exam" element={<CreateExam />} />
 
           <Route
   path="/all-exams"

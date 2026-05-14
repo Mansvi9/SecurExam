@@ -2,31 +2,21 @@ import { Link, useNavigate } from "react-router-dom";
 import { auth, signOut } from "../firebase/auth";
 import { useAuth } from "../context/AuthContext";
 import "../styles/components/navbar.css";
-import { useEffect, useState } from "react";
 
 function Navbar() {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
 
-  const [role, setRole] = useState(null);
-
-  // 🔐 Get role from storage (you can later replace with Firebase fetch)
-  useEffect(() => {
-    const savedRole = localStorage.getItem("role");
-    setRole(savedRole);
-  }, []);
+  // 🔥 FIX: direct read (no state, no useEffect issue)
+  const role = localStorage.getItem("role");
 
   const handleLogout = async () => {
     const confirmLogout = window.confirm("Are you sure you want to logout?");
-
     if (!confirmLogout) return;
 
     try {
       await signOut(auth);
-
-      // clear role on logout
       localStorage.removeItem("role");
-
       navigate("/login");
     } catch (error) {
       console.log(error);
@@ -54,16 +44,20 @@ function Navbar() {
             <li>
               <Link to="/login">Login</Link>
             </li>
-
             <li>
               <Link to="/register">Register</Link>
             </li>
           </>
         )}
 
-        {/* LOGGED IN USER */}
+        {/* LOGGED IN */}
         {currentUser && (
           <>
+            {/* USER NAME */}
+            <li className="user-name">
+              {currentUser.displayName || currentUser.email}
+            </li>
+
             {/* DASHBOARD */}
             <li>
               <Link to="/student-dashboard">
@@ -71,18 +65,17 @@ function Navbar() {
               </Link>
             </li>
 
-            {/* EXAMS (ALL USERS) */}
-            <li>
-              <Link to="/all-exams">
-                Exams
-              </Link>
-            </li>
-
-            {/* 👨‍🏫 ADMIN ONLY */}
-            {role === "admin" && (
+            {/* ROLE BASED MENU */}
+            {role === "admin" ? (
               <li>
                 <Link to="/create-exam">
                   Create Exam
+                </Link>
+              </li>
+            ) : (
+              <li>
+                <Link to="/all-exams">
+                  Exams
                 </Link>
               </li>
             )}
