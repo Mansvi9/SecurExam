@@ -29,62 +29,77 @@ function AppRoutes() {
 
         <Routes>
 
+          {/* HOME */}
           <Route
             path="/"
             element={<Home />}
           />
 
+          {/* LOGIN */}
           <Route
             path="/login"
             element={<Login />}
           />
 
+          {/* REGISTER */}
           <Route
             path="/register"
             element={<Register />}
           />
 
+          {/* STUDENT DASHBOARD */}
           <Route
             path="/student-dashboard"
             element={<StudentDashboard />}
           />
 
+          {/* ADMIN DASHBOARD */}
           <Route
             path="/admin-dashboard"
             element={<AdminDashboard />}
           />
 
+          {/* EXAM PAGE */}
           <Route
-  path="/exam/:examId"
-  element={<Exam />}
-/>
+            path="/exam/:examId"
+            element={<Exam />}
+          />
 
-<Route
-  path="/results-dashboard"
-  element={<ResultsDashboard />}
-/>
-
+          {/* RESULTS */}
           <Route
             path="/result"
             element={<Result />}
           />
 
+          {/* RESULTS DASHBOARD */}
+          <Route
+            path="/results-dashboard"
+            element={<ResultsDashboard />}
+          />
+
+          {/* CREATE EXAM */}
+          <Route
+            path="/create-exam"
+            element={<CreateExam />}
+          />
+
+          {/* ALL EXAMS */}
+          <Route
+            path="/all-exams"
+            element={<AllExams />}
+          />
+
+          {/* ADD QUESTION */}
+          <Route
+            path="/add-question/:examId"
+            element={<AddQuestion />}
+          />
+
+          {/* NOT FOUND */}
           <Route
             path="*"
             element={<NotFound />}
           />
-
-          <Route path="/admin/create-exam" element={<CreateExam />} />
-
-          <Route
-  path="/all-exams"
-  element={<AllExams />}
-/>
-
-<Route
-  path="/add-question/:examId"
-  element={<AddQuestion />}
-/>
 
         </Routes>
 

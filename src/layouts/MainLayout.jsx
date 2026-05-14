@@ -1,12 +1,21 @@
 import Navbar from "../components/Navbar";
+import AdminNavbar from "../components/AdminNavbar";
 
 function MainLayout({ children }) {
+
+  const role = localStorage.getItem("role");
+
+  console.log("ROLE =", role);
 
   return (
 
     <div>
 
-      <Navbar />
+      {role === "company" ? (
+        <AdminNavbar />
+      ) : (
+        <Navbar />
+      )}
 
       {children}
 

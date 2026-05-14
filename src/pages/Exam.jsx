@@ -19,7 +19,9 @@ import db from "../firebase/firestore";
 import {
   collection,
   getDocs,
-  addDoc
+  addDoc,
+  deleteDoc,
+  doc
 } from "firebase/firestore";
 
 import {
@@ -30,7 +32,15 @@ import "../styles/pages/exam.css";
 
 function Exam() {
 
-  const faceIntervalRef = useRef(null);
+  const ADMIN_EMAILS = [
+    "admin@gmail.com"
+  ];
+
+  const faceIntervalRef =
+    useRef(null);
+
+  const isTerminatedRef =
+    useRef(false);
 
   const { examId } =
     useParams();
@@ -61,8 +71,9 @@ function Exam() {
     setFaceMessage] =
     useState("");
 
-  // 🔥 NEW: fullscreen detection flag
-  const isTerminatedRef = useRef(false);
+  const [isAdmin,
+    setIsAdmin] =
+    useState(false);
 
   useEffect(() => {
 
@@ -70,38 +81,70 @@ function Exam() {
 
     loadModels();
 
-    // 🔥 AUTO FULLSCREEN START
-    const enterFullscreen = async () => {
-      try {
-        if (document.documentElement.requestFullscreen) {
-          await document.documentElement.requestFullscreen();
+    if (
+      ADMIN_EMAILS.includes(
+        auth.currentUser?.email
+      )
+    ) {
+
+      setIsAdmin(true);
+
+    }
+
+    const enterFullscreen =
+      async () => {
+
+        try {
+
+          if (
+            document
+              .documentElement
+              .requestFullscreen
+          ) {
+
+            await document
+              .documentElement
+              .requestFullscreen();
+
+          }
+
+        } catch (err) {
+
+          console.log(err);
+
         }
-      } catch (err) {
-        console.log(err);
-      }
-    };
+
+      };
 
     enterFullscreen();
 
   }, []);
 
-  // 🔥 FULLSCREEN EXIT DETECTION (NEW)
   useEffect(() => {
 
-    const handleFullscreenChange = () => {
+    const handleFullscreenChange =
+      () => {
 
-      if (!document.fullscreenElement) {
+        if (
+          !document.fullscreenElement
+        ) {
 
-        if (isTerminatedRef.current) return;
-        isTerminatedRef.current = true;
+          if (
+            isTerminatedRef.current
+          ) return;
 
-        alert("Fullscreen Exit Detected! Exam Terminated.");
+          isTerminatedRef.current =
+            true;
 
-        handleSubmitExam("Fullscreen Exited");
+          alert(
+            "Fullscreen Exit Detected! Exam Terminated."
+          );
 
-      }
+          handleSubmitExam();
 
-    };
+        }
+
+      };
 
     document.addEventListener(
       "fullscreenchange",
@@ -109,10 +152,12 @@ function Exam() {
     );
 
     return () => {
+
       document.removeEventListener(
         "fullscreenchange",
         handleFullscreenChange
       );
+
     };
 
   }, []);
@@ -131,7 +176,8 @@ function Exam() {
       setInterval(() => {
 
         setTimeLeft(
-          (prev) => prev - 1
+          (prev) =>
+            prev - 1
         );
 
       }, 1000);
@@ -146,14 +192,17 @@ function Exam() {
     const handleVisibility =
       () => {
 
-        if (document.hidden) {
+        if (
+          document.hidden
+        ) {
 
           alert(
             "Warning: Tab Switching Detected!"
           );
 
           setWarningCount(
-            (prev) => prev + 1
+            (prev) =>
+              prev + 1
           );
 
         }
@@ -178,44 +227,9 @@ function Exam() {
 
   useEffect(() => {
 
-    const handleFullscreen =
-      () => {
-
-        if (
-          !document.fullscreenElement
-        ) {
-
-          alert(
-            "Warning: Fullscreen Exited!"
-          );
-
-          setWarningCount(
-            (prev) => prev + 1
-          );
-
-        }
-
-      };
-
-    document.addEventListener(
-      "fullscreenchange",
-      handleFullscreen
-    );
-
-    return () => {
-
-      document.removeEventListener(
-        "fullscreenchange",
-        handleFullscreen
-      );
-
-    };
-
-  }, []);
-
-  useEffect(() => {
-
-    if (warningCount >= 3) {
+    if (
+      warningCount >= 3
+    ) {
 
       alert(
         "Too Many Warnings! Exam Submitted."
@@ -296,11 +310,21 @@ function Exam() {
   }, []);
 
   useEffect(() => {
+
     return () => {
-      if (faceIntervalRef.current) {
-        clearInterval(faceIntervalRef.current);
+
+      if (
+        faceIntervalRef.current
+      ) {
+
+        clearInterval(
+          faceIntervalRef.current
+        );
+
       }
+
     };
+
   }, []);
 
   useEffect(() => {
@@ -413,7 +437,8 @@ function Exam() {
             );
 
             setWarningCount(
-              (prev) => prev + 1
+              (prev) =>
+                prev + 1
             );
 
           }
@@ -423,7 +448,9 @@ function Exam() {
       }, 5000);
 
     return () =>
-      clearInterval(checkCamera);
+      clearInterval(
+        checkCamera
+      );
 
   }, []);
 
@@ -438,30 +465,66 @@ function Exam() {
   }
 
   function startFaceDetection() {
-    if (faceIntervalRef.current) return;
 
-    faceIntervalRef.current = setInterval(async () => {
-      if (
-        webcamRef.current &&
-        webcamRef.current.video
-      ) {
-        const detections =
-          await faceapi.detectAllFaces(
-            webcamRef.current.video,
-            new faceapi.TinyFaceDetectorOptions()
-          );
+    if (
+      faceIntervalRef.current
+    ) return;
 
-        if (detections.length === 0) {
-          setFaceMessage("No Face Detected");
-          setWarningCount((prev) => prev + 1);
-        } else if (detections.length > 1) {
-          setFaceMessage("Multiple Faces Detected");
-          setWarningCount((prev) => prev + 1);
-        } else {
-          setFaceMessage("Face Detected");
-        }
-      }
-    }, 5000);
+    faceIntervalRef.current =
+      setInterval(
+        async () => {
+
+          if (
+            webcamRef.current &&
+            webcamRef.current.video
+          ) {
+
+            const detections =
+              await faceapi.detectAllFaces(
+                webcamRef.current.video,
+                new faceapi.TinyFaceDetectorOptions()
+              );
+
+            if (
+              detections.length === 0
+            ) {
+
+              setFaceMessage(
+                "No Face Detected"
+              );
+
+              setWarningCount(
+                (prev) =>
+                  prev + 1
+              );
+
+            } else if (
+              detections.length > 1
+            ) {
+
+              setFaceMessage(
+                "Multiple Faces Detected"
+              );
+
+              setWarningCount(
+                (prev) =>
+                  prev + 1
+              );
+
+            } else {
+
+              setFaceMessage(
+                "Face Detected"
+              );
+
+            }
+
+          }
+
+        },
+        5000
+      );
+
   }
 
   async function fetchQuestions() {
@@ -480,14 +543,16 @@ function Exam() {
 
       const data = [];
 
-      querySnapshot.forEach((doc) => {
+      querySnapshot.forEach(
+        (doc) => {
 
-        data.push({
-          id: doc.id,
-          ...doc.data()
-        });
+          data.push({
+            id: doc.id,
+            ...doc.data()
+          });
 
-      });
+        }
+      );
 
       setQuestions(data);
 
@@ -506,7 +571,8 @@ function Exam() {
 
     setAnswers({
       ...answers,
-      [questionId]: option
+      [questionId]:
+        option
     });
 
   }
@@ -515,22 +581,28 @@ function Exam() {
 
     let score = 0;
 
-    questions.forEach((question) => {
+    questions.forEach(
+      (question) => {
 
-      if (
-        answers[question.id]
-        ===
-        question.correctAnswer
-      ) {
+        if (
+          answers[
+            question.id
+          ] ===
+          question.correctAnswer
+        ) {
 
-        score++;
+          score++;
+
+        }
 
       }
-
-    });
+    );
 
     await addDoc(
-      collection(db, "results"),
+      collection(
+        db,
+        "results"
+      ),
       {
         studentName:
           auth.currentUser
@@ -569,6 +641,94 @@ function Exam() {
 
   }
 
+  async function handleDeleteExam() {
+
+    if (!isAdmin) {
+
+      alert(
+        "Only Admin Can Delete Exam"
+      );
+
+      return;
+
+    }
+
+    const confirmDelete =
+      window.confirm(
+        "Are You Sure You Want To Delete This Exam?"
+      );
+
+    if (
+      !confirmDelete
+    ) return;
+
+    try {
+
+      const questionSnapshot =
+        await getDocs(
+          collection(
+            db,
+            "exams",
+            examId,
+            "questions"
+          )
+        );
+
+      const deletePromises =
+        [];
+
+      questionSnapshot.forEach(
+        (
+          questionDoc
+        ) => {
+
+          deletePromises.push(
+            deleteDoc(
+              doc(
+                db,
+                "exams",
+                examId,
+                "questions",
+                questionDoc.id
+              )
+            )
+          );
+
+        }
+      );
+
+      await Promise.all(
+        deletePromises
+      );
+
+      await deleteDoc(
+        doc(
+          db,
+          "exams",
+          examId
+        )
+      );
+
+      alert(
+        "Exam Deleted Successfully"
+      );
+
+      navigate(
+        "/dashboard"
+      );
+
+    } catch (error) {
+
+      console.log(error);
+
+      alert(
+        "Error Deleting Exam"
+      );
+
+    }
+
+  }
+
   return (
 
     <div className="exam-page">
@@ -577,19 +737,58 @@ function Exam() {
         AI Proctored Exam
       </h1>
 
+      {
+        isAdmin && (
+
+          <button
+            className="submit-btn"
+            onClick={
+              handleDeleteExam
+            }
+            style={{
+              backgroundColor:
+                "red",
+              marginBottom:
+                "20px"
+            }}
+          >
+            Delete Exam
+          </button>
+
+        )
+      }
+
       <h2 className="timer">
+
         Time Left:
         {" "}
-        {Math.floor(timeLeft / 60)}
+
+        {
+          Math.floor(
+            timeLeft / 60
+          )
+        }
+
         :
-        {String(timeLeft % 60)
-          .padStart(2, "0")}
+
+        {
+          String(
+            timeLeft % 60
+          ).padStart(
+            2,
+            "0"
+          )
+        }
+
       </h2>
 
       <h3 className="warning-text">
+
         Warnings:
         {" "}
+
         {warningCount}/3
+
       </h3>
 
       <div className="webcam-box">
@@ -605,51 +804,72 @@ function Exam() {
 
       </div>
 
-      {questions.map((question,
-        index) => (
+      {questions.map(
+        (
+          question,
+          index
+        ) => (
 
-        <div
-          key={question.id}
-          className="question-card"
-        >
+          <div
+            key={
+              question.id
+            }
+            className="question-card"
+          >
 
-          <h2>
-            {index + 1}.
-            {" "}
-            {question.question}
-          </h2>
+            <h2>
 
-          <div className="options">
+              {index + 1}.
 
-            {question.options.map(
-              (option) => (
+              {" "}
 
-              <button
-                key={option}
-                className={
-                  answers[
-                    question.id
-                  ] === option
-                    ? "selected-option"
-                    : ""
-                }
-                onClick={() =>
-                  handleOptionSelect(
-                    question.id,
+              {
+                question.question
+              }
+
+            </h2>
+
+            <div className="options">
+
+              {
+                question.options.map(
+                  (
                     option
-                  )
-                }
-              >
-                {option}
-              </button>
+                  ) => (
 
-            ))}
+                    <button
+                      key={
+                        option
+                      }
+                      className={
+                        answers[
+                          question.id
+                        ] === option
+                          ? "selected-option"
+                          : ""
+                      }
+                      onClick={() =>
+                        handleOptionSelect(
+                          question.id,
+                          option
+                        )
+                      }
+                    >
+
+                      {option}
+
+                    </button>
+
+                  )
+                )
+              }
+
+            </div>
 
           </div>
 
-        </div>
-
-      ))}
+        )
+      )}
 
       <button
         className="submit-btn"

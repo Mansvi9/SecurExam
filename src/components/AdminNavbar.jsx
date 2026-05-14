@@ -3,7 +3,7 @@ import { auth, signOut } from "../firebase/auth";
 import { useAuth } from "../context/AuthContext";
 import "../styles/components/navbar.css";
 
-function Navbar() {
+function AdminNavbar() {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
 
@@ -24,7 +24,7 @@ function Navbar() {
   };
 
   return (
-    <nav className="navbar">
+    <nav className="admin-navbar">
 
       {/* LOGO */}
       <div className="logo">
@@ -60,18 +60,18 @@ function Navbar() {
 
             {/* DASHBOARD */}
             <li>
-              <Link to="/student-dashboard">
+              <Link to="/admin-dashboard">
                 Dashboard
               </Link>
             </li>
 
-            {/* <li>
+            <li>
                 <Link to="/create-exam">
                   Create Exam
                 </Link>
-              </li> */}
+              </li>
 
-              <li>
+            <li>
                 <Link to="/all-exams">
                   Exams
                 </Link>
@@ -116,4 +116,4 @@ function Navbar() {
   );
 }
 
-export default Navbar;
+export default AdminNavbar;

@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { useNavigate } from "react-router-dom";
+
 import "../styles/pages/register.css";
 
 import db from "../firebase/firestore";
@@ -15,6 +17,8 @@ import {
 } from "../firebase/auth";
 
 function Register() {
+
+  const navigate = useNavigate();
 
   const [name, setName] = useState("");
 
@@ -49,7 +53,21 @@ function Register() {
         }
       );
 
+      // role localStorage me save
+      localStorage.setItem("role", role);
+
       alert("Registration Successful");
+
+      // ROLE BASED REDIRECT
+      if (role === "student") {
+
+        navigate("/student-dashboard");
+
+      } else if (role === "company") {
+
+        navigate("/admin-dashboard");
+
+      }
 
     } catch (error) {
 

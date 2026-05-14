@@ -2,6 +2,10 @@ import {
   useState
 } from "react";
 
+import {
+  useNavigate
+} from "react-router-dom";
+
 import db from "../firebase/firestore";
 
 import {
@@ -13,13 +17,19 @@ import "../styles/pages/createExam.css";
 
 function CreateExam() {
 
-  const [title, setTitle] =
+  const navigate =
+    useNavigate();
+
+  const [title,
+    setTitle] =
     useState("");
 
-  const [subject, setSubject] =
+  const [subject,
+    setSubject] =
     useState("");
 
-  const [duration, setDuration] =
+  const [duration,
+    setDuration] =
     useState("");
 
   const handleCreateExam =
@@ -29,18 +39,27 @@ function CreateExam() {
 
       try {
 
-        await addDoc(
-          collection(db, "exams"),
-          {
-            title,
-            subject,
-            duration,
-            createdAt: new Date()
-          }
-        );
+        const docRef =
+          await addDoc(
+            collection(
+              db,
+              "exams"
+            ),
+            {
+              title,
+              subject,
+              duration,
+              createdAt:
+                new Date()
+            }
+          );
 
         alert(
           "Exam Created Successfully"
+        );
+
+        navigate(
+          `/add-question/${docRef.id}`
         );
 
         setTitle("");
@@ -50,6 +69,10 @@ function CreateExam() {
       } catch (error) {
 
         console.log(error);
+
+        alert(
+          "Error Creating Exam"
+        );
 
       }
 
@@ -69,7 +92,9 @@ function CreateExam() {
 
         <form
           className="create-exam-form"
-          onSubmit={handleCreateExam}
+          onSubmit={
+            handleCreateExam
+          }
         >
 
           <input
@@ -77,8 +102,11 @@ function CreateExam() {
             placeholder="Exam Title"
             value={title}
             onChange={(e) =>
-              setTitle(e.target.value)
+              setTitle(
+                e.target.value
+              )
             }
+            required
           />
 
           <input
@@ -86,20 +114,28 @@ function CreateExam() {
             placeholder="Subject"
             value={subject}
             onChange={(e) =>
-              setSubject(e.target.value)
+              setSubject(
+                e.target.value
+              )
             }
+            required
           />
 
           <input
             type="number"
-            placeholder="Duration"
+            placeholder="Duration In Minutes"
             value={duration}
             onChange={(e) =>
-              setDuration(e.target.value)
+              setDuration(
+                e.target.value
+              )
             }
+            required
           />
 
-          <button type="submit">
+          <button
+            type="submit"
+          >
 
             Create Exam
 
